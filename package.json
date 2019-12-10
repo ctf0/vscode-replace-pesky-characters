@@ -1,0 +1,87 @@
+{
+    "name": "replace-pesky-characters",
+    "displayName": "Replace Pesky Characters",
+    "description": "Replaces Annoying Characters from Word or other sources with their more standard counterparts.",
+    "version": "0.0.1",
+    "publisher": "ctf0",
+    "repository": "https://github.com/ctf0/vscode-replace-pesky-characters",
+    "engines": {
+        "vscode": "^1.20.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.replacePeskyCharacters",
+                "title": "Replace Pesky Characters"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Paths Warning",
+            "properties": {
+                "replace_pesky_characters.chars": {
+                    "type": "object",
+                    "default": {
+                        "′": "'",
+                        "´": "'",
+                        "’": "'",
+                        "‘": "'",
+                        "″": "\"",
+                        "“": "\"",
+                        "”": "\"",
+                        "…": "...",
+                        "−": "-",
+                        "–": "-",
+                        "—": "--",
+                        "¦": "|",
+                        "¼": "1/4",
+                        "½": "1/2",
+                        "¾": "3/4",
+                        "©": "(c)",
+                        "€": "(e)",
+                        "®": "(r)",
+                        "™": "(tm)",
+                        "·": "*",
+                        "•": "*",
+                        "‼": "!!",
+                        "∷": ": :",
+                        "≔": ":=",
+                        "≅": "~=",
+                        "≈": "~",
+                        "±": "+-",
+                        "∓": "-+",
+                        "«": "<<",
+                        "≪": "<<",
+                        "‹": "<",
+                        "⟨": "<",
+                        "≤": "<=",
+                        "←": "<-",
+                        "→": "->",
+                        "≥": ">=",
+                        "»": ">>",
+                        "≫": ">>",
+                        "›": ">",
+                        "⟩": ">",
+                        "⁄": "/",
+                        "×": "x"
+                    },
+                    "description": "characters to replace"
+                },
+                "replace_pesky_characters.exclude": {
+                    "type": "array",
+                    "default": [
+                        "package.json"
+                    ],
+                    "description": "exclude files from replacing"
+                }
+            }
+        }
+    }
+}
