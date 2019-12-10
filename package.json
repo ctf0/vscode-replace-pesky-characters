@@ -23,10 +23,9 @@
             }
         ],
         "configuration": {
-            "type": "object",
-            "title": "Paths Warning",
+            "title": "Replace Pesky Characters",
             "properties": {
-                "replace_pesky_characters.chars": {
+                "replace-pesky-characters.chars": {
                     "type": "object",
                     "default": {
                         "′": "'",
@@ -74,7 +73,7 @@
                     },
                     "description": "characters to replace"
                 },
-                "replace_pesky_characters.exclude": {
+                "replace-pesky-characters.exclude": {
                     "type": "array",
                     "default": [
                         "package.json"

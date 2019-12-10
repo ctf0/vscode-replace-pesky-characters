@@ -45,7 +45,7 @@ function replaceWith(str) {
 }
 
 function getConfig() {
-    return vscode.workspace.getConfiguration('replace_pesky_characters')
+    return vscode.workspace.getConfiguration('replace-pesky-characters')
 }
 
 function deactivate() {
