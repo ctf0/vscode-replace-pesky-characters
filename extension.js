@@ -18,17 +18,26 @@ async function applyReplacements() {
     let doc = editor.document
     let txt = doc.getText()
     let fileName = doc.fileName
+    let regex = new RegExp(Object.keys(getConfig().chars).join('|'), 'gi')
 
     if (!checkForExclusions(fileName)) {
-        let fullRange = new vscode.Range(
-            doc.positionAt(0),
-            doc.positionAt(txt.length - 1)
-        )
+        if (needChanges(txt, regex)) {
+            let fullRange = new vscode.Range(
+                doc.positionAt(0),
+                doc.positionAt(txt.length - 1)
+            )
 
-        let done = await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt)))
+            let done = await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt, regex)))
 
-        return done
+            return done
+        }
+
+        return false
     }
+}
+
+function needChanges(txt, regex) {
+    return regex.test(txt)
 }
 
 function checkForExclusions(fileName) {
@@ -37,11 +46,10 @@ function checkForExclusions(fileName) {
     return exclude.some((el) => fileName.includes(el))
 }
 
-function replaceWith(str) {
+function replaceWith(txt, regex) {
     let mapObj = getConfig().chars
-    let keys = Object.keys(mapObj).join('|')
 
-    return str.replace(new RegExp(keys, 'gi'), (matched) => mapObj[matched.toLowerCase()])
+    return txt.replace(regex, (matched) => mapObj[matched.toLowerCase()])
 }
 
 function getConfig() {
