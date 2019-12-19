@@ -7,3 +7,7 @@
 ## 0.0.2
 
 - check b4 replacing
+
+## 0.0.3
+
+- show msg on replacment

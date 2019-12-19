@@ -27,9 +27,9 @@ async function applyReplacements() {
                 doc.positionAt(txt.length - 1)
             )
 
-            let done = await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt, regex)))
+            await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt, regex)))
 
-            return done
+            return vscode.window.showInformationMessage('Replace Pesky Characters: all done')
         }
 
         return false
