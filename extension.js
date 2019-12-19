@@ -12,9 +12,6 @@ exports.activate = activate
 
 async function applyReplacements() {
     let editor = vscode.window.activeTextEditor
-
-    if (!editor) return
-
     let doc = editor.document
     let txt = doc.getText()
     let fileName = doc.fileName

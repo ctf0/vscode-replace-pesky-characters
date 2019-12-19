@@ -2,7 +2,7 @@
     "name": "replace-pesky-characters",
     "displayName": "Replace Pesky Characters",
     "description": "Replaces Annoying Characters from Word or other sources with their more standard counterparts.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "ctf0",
     "repository": "https://github.com/ctf0/vscode-replace-pesky-characters",
     "engines": {
@@ -12,7 +12,7 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "onCommand:extension.replacePeskyCharacters"
     ],
     "main": "./extension",
     "contributes": {
@@ -22,6 +22,21 @@
                 "title": "Replace Pesky Characters"
             }
         ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.replacePeskyCharacters",
+                    "when": "editorIsOpen",
+                    "group": "1_modification"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "extension.replacePeskyCharacters",
+                    "when": "editorIsOpen"
+                }
+            ]
+        },
         "configuration": {
             "title": "Replace Pesky Characters",
             "properties": {

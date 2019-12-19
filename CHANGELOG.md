@@ -11,3 +11,7 @@
 ## 0.0.3
 
 - show msg on replacment
+
+## 0.0.4
+
+- add menu item
