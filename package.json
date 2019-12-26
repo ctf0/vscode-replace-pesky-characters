@@ -2,7 +2,7 @@
     "name": "replace-pesky-characters",
     "displayName": "Replace Pesky Characters",
     "description": "Replaces Annoying Characters from Word or other sources with their more standard counterparts.",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "publisher": "ctf0",
     "repository": "https://github.com/ctf0/vscode-replace-pesky-characters",
     "engines": {
@@ -91,7 +91,8 @@
                 "replace-pesky-characters.exclude": {
                     "type": "array",
                     "default": [
-                        "package.json"
+                        "package.json",
+                        "settings.json"
                     ],
                     "description": "exclude files from replacing"
                 }
