@@ -15,3 +15,7 @@
 ## 0.0.4
 
 - add menu item
+
+## 0.0.6
+
+- add support for code action "quickfix" and problem view
