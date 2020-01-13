@@ -99,7 +99,7 @@
             }
         }
     },
-    "dependencies": {
+    "devDependencies": {
         "@types/node": "^13.1.6"
     }
 }
