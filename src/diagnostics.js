@@ -35,7 +35,7 @@ function createDiagnostic(lineOfText, lineIndex, char) {
         `"${char}" is a pesky character & should be replaced`,
         vscode.DiagnosticSeverity.Warning
     )
-    diagnostic.code = PESKY
+    diagnostic.source = PESKY
 
     return diagnostic
 }

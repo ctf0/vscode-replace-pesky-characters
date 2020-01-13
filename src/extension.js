@@ -25,17 +25,6 @@ async function activate(context) {
     subscribeToDocumentChanges(context, peskyDiagnostics, config.chars)
 
     context.subscriptions.push(
-        vscode.languages.registerCodeActionsProvider(
-            [
-                { scheme: 'file' },
-                { scheme: 'untitled' }
-            ],
-            new charProblem(),
-            { providedCodeActionKinds: charProblem.providedCodeActionKinds }
-        )
-    )
-
-    context.subscriptions.push(
         vscode.commands.registerCommand('extension.replacePeskyCharacters', () => applyReplacements())
     )
 }
@@ -57,7 +46,6 @@ async function applyReplacements() {
         return vscode.window.showInformationMessage('Replace Pesky Characters: all done')
     }
 }
-
 
 function checkForExclusions(fileName) {
     let exclude = config.exclude
@@ -84,7 +72,7 @@ async function readConfig() {
 }
 
 
-/* Test --------------------------------------------------------------------- */
+/* code action --------------------------------------------------------------------- */
 class charBulb {
 
     static providedCodeActionKinds = [
@@ -139,20 +127,6 @@ class charBulb {
     }
 }
 
-/**
- * Provides code actions corresponding to diagnostic problems.
- */
-class charProblem {
-
-    static providedCodeActionKinds = [
-        vscode.CodeActionKind.QuickFix
-    ]
-
-    provideCodeActions(document, range, context, token) {
-        // for each diagnostic entry that has the matching `code`, create a code action command
-        return context.diagnostics.filter((diagnostic) => diagnostic.code === PESKY)
-    }
-}
 
 exports.activate = activate
 
