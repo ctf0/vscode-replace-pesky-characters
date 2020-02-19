@@ -1,5 +1,6 @@
 /** To demonstrate code actions associated with Diagnostics problems, this file provides a mock diagnostics entries. */
 const vscode = require('vscode')
+let { checkForExclusions } = require('./util')
 
 const PESKY = 'peskyCharacters'
 
@@ -11,15 +12,18 @@ const PESKY = 'peskyCharacters'
  */
 function refreshDiagnostics(doc, peskyDiagnostics, charsList) {
     let diagnostics = []
-    let regex = new RegExp(Object.keys(charsList).join('|'), 'i')
 
-    for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
-        const lineOfText = doc.lineAt(lineIndex)
-        let matches = lineOfText.text.match(regex)
+    if (!checkForExclusions(doc.fileName)) {
+        let regex = new RegExp(Object.keys(charsList).join('|'), 'i')
 
-        if (matches) {
-            for (const char of matches) {
-                diagnostics.push(createDiagnostic(lineOfText, lineIndex, char))
+        for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
+            const lineOfText = doc.lineAt(lineIndex)
+            let matches = lineOfText.text.match(regex)
+
+            if (matches) {
+                for (const char of matches) {
+                    diagnostics.push(createDiagnostic(lineOfText, lineIndex, char))
+                }
             }
         }
     }

@@ -2,11 +2,20 @@
 
 const vscode = require('vscode')
 let { subscribeToDocumentChanges, PESKY } = require('./diagnostics')
+let { checkForExclusions, readConfig, PACKAGE_NAME } = require('./util')
 
 let config = {}
 
 async function activate(context) {
-    await readConfig()
+    setContext(false)
+
+    config = await readConfig()
+
+    vscode.workspace.onDidChangeConfiguration(async (e) => {
+        if (e.affectsConfiguration(PACKAGE_NAME)) {
+            config = await readConfig()
+        }
+    })
 
     context.subscriptions.push(
         vscode.languages.registerCodeActionsProvider(
@@ -47,12 +56,6 @@ async function applyReplacements() {
     }
 }
 
-function checkForExclusions(fileName) {
-    let exclude = config.exclude
-
-    return exclude.some((el) => fileName.includes(el))
-}
-
 function replaceWith(txt) {
     let keys = Object.keys(config.chars)
 
@@ -67,10 +70,9 @@ function getRegex(keys, global = true) {
     return new RegExp(keys.join('|'), global ? 'g' : '' + 'i')
 }
 
-async function readConfig() {
-    return config = await vscode.workspace.getConfiguration('replace-pesky-characters')
+function setContext(val, key = 'peskyEnabled') {
+    vscode.commands.executeCommand('setContext', key, val)
 }
-
 
 /* code action --------------------------------------------------------------------- */
 class charBulb {
@@ -83,8 +85,12 @@ class charBulb {
         let list = config.chars
         let keys = Object.keys(list)
 
-        if (!this.hasPeskyChar(document, range, keys)) {
+        if (!this.hasPeskyChar(document, range, keys) || checkForExclusions(document.fileName)) {
+            setContext(false)
+
             return
+        } else {
+            setContext(true)
         }
 
         let item

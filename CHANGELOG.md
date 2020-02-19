@@ -19,3 +19,7 @@
 ## 0.0.6
 
 - add support for code action "quickfix" and problem view
+
+## 0.0.8
+
+- honor exclude settings for codeActions and diagnostics
