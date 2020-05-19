@@ -1,4 +1,3 @@
-/** To demonstrate code actions associated with Diagnostics problems, this file provides a mock diagnostics entries. */
 const vscode = require('vscode')
 let { checkForExclusions } = require('./util')
 
@@ -6,7 +5,6 @@ const PESKY = 'peskyCharacters'
 
 /**
  * Analyzes the text document for problems.
- * This demo diagnostic problem provider finds all mentions of 'emoji'.
  * @param doc text document to analyze
  * @param peskyDiagnostics diagnostic collection
  */
