@@ -23,3 +23,7 @@
 ## 0.0.8
 
 - honor exclude settings for codeActions and diagnostics
+
+## 0.0.9
+
+- add option to show/hide the `Replace Pesky Characters: all done` msg

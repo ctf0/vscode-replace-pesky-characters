@@ -1,8 +1,8 @@
 'use strict'
 
 const vscode = require('vscode')
-let { subscribeToDocumentChanges, PESKY } = require('./diagnostics')
-let { checkForExclusions, readConfig, PACKAGE_NAME } = require('./util')
+let {subscribeToDocumentChanges, PESKY} = require('./diagnostics')
+let {checkForExclusions, readConfig, PACKAGE_NAME} = require('./util')
 
 let config = {}
 
@@ -20,11 +20,11 @@ async function activate(context) {
     context.subscriptions.push(
         vscode.languages.registerCodeActionsProvider(
             [
-                { scheme: 'file' },
-                { scheme: 'untitled' }
+                {scheme: 'file'},
+                {scheme: 'untitled'}
             ],
             new charBulb(),
-            { providedCodeActionKinds: charBulb.providedCodeActionKinds }
+            {providedCodeActionKinds: charBulb.providedCodeActionKinds}
         )
     )
 
@@ -52,7 +52,9 @@ async function applyReplacements() {
 
         await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt)))
 
-        return vscode.window.showInformationMessage('Replace Pesky Characters: all done')
+        if (config.showNotif) {
+            return vscode.window.showInformationMessage('Replace Pesky Characters: all done')
+        }
     }
 }
 
@@ -76,7 +78,6 @@ function setContext(val, key = 'peskyEnabled') {
 
 /* code action --------------------------------------------------------------------- */
 class charBulb {
-
     static providedCodeActionKinds = [
         vscode.CodeActionKind.QuickFix
     ]
@@ -125,14 +126,13 @@ class charBulb {
         const action = new vscode.CodeAction('pesky: fix all', vscode.CodeActionKind.QuickFix)
         action.command = {
             command: 'extension.replacePeskyCharacters',
-            title: 'Replace Pesky Characters',
+            title  : 'Replace Pesky Characters',
             tooltip: 'Replaces Annoying Characters'
         }
 
         return action
     }
 }
-
 
 exports.activate = activate
 
