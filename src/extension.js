@@ -2,11 +2,12 @@
 
 const vscode = require('vscode')
 let {subscribeToDocumentChanges, PESKY} = require('./diagnostics')
-let {checkForExclusions, readConfig, config, PACKAGE_NAME} = require('./util')
+let {readConfig, getConfig, checkForExclusions, PACKAGE_NAME} = require('./util')
 
 async function activate(context) {
-    setContext(false)
+    let {subscriptions} = context
 
+    setContext(false)
     await readConfig()
 
     vscode.workspace.onDidChangeConfiguration(async (e) => {
@@ -15,7 +16,7 @@ async function activate(context) {
         }
     })
 
-    context.subscriptions.push(
+    subscriptions.push(
         vscode.languages.registerCodeActionsProvider(
             [
                 {scheme: 'file'},
@@ -27,11 +28,11 @@ async function activate(context) {
     )
 
     const peskyDiagnostics = vscode.languages.createDiagnosticCollection(PESKY)
-    context.subscriptions.push(peskyDiagnostics)
+    subscriptions.push(peskyDiagnostics)
 
-    subscribeToDocumentChanges(context, peskyDiagnostics, config.chars)
+    subscribeToDocumentChanges(context, peskyDiagnostics, getConfig().chars)
 
-    context.subscriptions.push(
+    subscriptions.push(
         vscode.commands.registerCommand('pesky.replace', () => applyReplacements())
     )
 }
@@ -50,20 +51,20 @@ async function applyReplacements() {
 
         await editor.edit((edit) => edit.replace(fullRange, replaceWith(txt)))
 
-        if (config.showNotif) {
+        if (getConfig().showNotif) {
             return vscode.window.showInformationMessage('Replace Pesky Characters: all done')
         }
     }
 }
 
 function replaceWith(txt) {
-    let keys = Object.keys(config.chars)
+    let keys = Object.keys(getConfig().chars)
 
     return txt.replace(getRegex(keys), (matched) => getReplacement(matched))
 }
 
 function getReplacement(match) {
-    return config.chars[match.toLowerCase()]
+    return getConfig().chars[match.toLowerCase()]
 }
 
 function getRegex(keys, global = true) {
@@ -81,10 +82,13 @@ class charBulb {
     ]
 
     provideCodeActions(document, range) {
-        let list = config.chars
+        let list = getConfig().chars
         let keys = Object.keys(list)
 
-        if (!this.hasPeskyChar(document, range, keys) || checkForExclusions(document.fileName)) {
+        if (
+            !this.hasPeskyChar(document, range, keys) ||
+            checkForExclusions(document.fileName)
+        ) {
             setContext(false)
 
             return
@@ -97,7 +101,12 @@ class charBulb {
         document.lineAt(range.start.line)
             .text
             .replace(getRegex(keys, false), (match, offset) => {
-                let r = new vscode.Range(range.start.line, offset, range.start.line, offset + match.length)
+                let r = new vscode.Range(
+                    range.start.line,
+                    offset,
+                    range.start.line,
+                    offset + match.length
+                )
                 item = this.createFix(document, r, match, getReplacement(match))
                 item.isPreferred = true
             })

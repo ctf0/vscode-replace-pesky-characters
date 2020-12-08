@@ -1,5 +1,5 @@
 const vscode = require('vscode')
-let { checkForExclusions } = require('./util')
+let {checkForExclusions} = require('./util')
 
 const PESKY = 'peskyCharacters'
 
@@ -43,23 +43,26 @@ function createDiagnostic(lineOfText, lineIndex, char) {
 }
 
 function subscribeToDocumentChanges(context, peskyDiagnostics, charsList) {
-    if (vscode.window.activeTextEditor) {
-        refreshDiagnostics(vscode.window.activeTextEditor.document, peskyDiagnostics, charsList)
+    let editor = vscode.window.activeTextEditor
+    let {subscriptions} = context
+
+    if (editor) {
+        refreshDiagnostics(editor.document, peskyDiagnostics, charsList)
     }
 
-    context.subscriptions.push(
-        vscode.window.onDidChangeActiveTextEditor((editor) => {
-            if (editor) {
-                refreshDiagnostics(editor.document, peskyDiagnostics, charsList)
+    subscriptions.push(
+        vscode.window.onDidChangeActiveTextEditor((e) => {
+            if (e) {
+                refreshDiagnostics(e.document, peskyDiagnostics, charsList)
             }
         })
     )
 
-    context.subscriptions.push(
+    subscriptions.push(
         vscode.workspace.onDidChangeTextDocument((e) => refreshDiagnostics(e.document, peskyDiagnostics, charsList))
     )
 
-    context.subscriptions.push(
+    subscriptions.push(
         vscode.workspace.onDidCloseTextDocument((doc) => peskyDiagnostics.delete(doc.uri))
     )
 }

@@ -32,3 +32,7 @@
 
 - fix package settings name
 - change command name
+
+## 0.1.1
+
+- fix a dump f@$#%^ issue
