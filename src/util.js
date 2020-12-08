@@ -1,6 +1,10 @@
 const vscode = require('vscode')
+const PACKAGE_NAME = 'replacePeskyCharacters'
 let config = {}
-const PACKAGE_NAME = 'replace-pesky-characters'
+
+async function readConfig() {
+    config = await vscode.workspace.getConfiguration(PACKAGE_NAME)
+}
 
 function checkForExclusions(fileName) {
     let exclude = config.exclude
@@ -8,14 +12,9 @@ function checkForExclusions(fileName) {
     return exclude.some((el) => fileName.includes(el))
 }
 
-async function readConfig() {
-    config = await vscode.workspace.getConfiguration(PACKAGE_NAME)
-
-    return config
-}
-
 module.exports = {
-    checkForExclusions,
     readConfig,
+    config,
+    checkForExclusions,
     PACKAGE_NAME
 }

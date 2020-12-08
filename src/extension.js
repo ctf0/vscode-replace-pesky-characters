@@ -2,18 +2,16 @@
 
 const vscode = require('vscode')
 let {subscribeToDocumentChanges, PESKY} = require('./diagnostics')
-let {checkForExclusions, readConfig, PACKAGE_NAME} = require('./util')
-
-let config = {}
+let {checkForExclusions, readConfig, config, PACKAGE_NAME} = require('./util')
 
 async function activate(context) {
     setContext(false)
 
-    config = await readConfig()
+    await readConfig()
 
     vscode.workspace.onDidChangeConfiguration(async (e) => {
         if (e.affectsConfiguration(PACKAGE_NAME)) {
-            config = await readConfig()
+            await readConfig()
         }
     })
 
@@ -34,7 +32,7 @@ async function activate(context) {
     subscribeToDocumentChanges(context, peskyDiagnostics, config.chars)
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.replacePeskyCharacters', () => applyReplacements())
+        vscode.commands.registerCommand('pesky.replace', () => applyReplacements())
     )
 }
 
@@ -125,9 +123,9 @@ class charBulb {
     createCommand() {
         const action = new vscode.CodeAction('pesky: fix all', vscode.CodeActionKind.QuickFix)
         action.command = {
-            command: 'extension.replacePeskyCharacters',
-            title  : 'Replace Pesky Characters',
-            tooltip: 'Replaces Annoying Characters'
+            command : 'pesky.replace',
+            title   : 'Replace Pesky Characters',
+            tooltip : 'Replaces Annoying Characters'
         }
 
         return action
