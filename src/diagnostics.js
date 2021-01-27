@@ -51,18 +51,8 @@ function subscribeToDocumentChanges(context, peskyDiagnostics, charsList) {
     }
 
     subscriptions.push(
-        vscode.window.onDidChangeActiveTextEditor((e) => {
-            if (e) {
-                refreshDiagnostics(e.document, peskyDiagnostics, charsList)
-            }
-        })
-    )
-
-    subscriptions.push(
-        vscode.workspace.onDidChangeTextDocument((e) => refreshDiagnostics(e.document, peskyDiagnostics, charsList))
-    )
-
-    subscriptions.push(
+        vscode.window.onDidChangeActiveTextEditor((e) => (e ? refreshDiagnostics(e.document, peskyDiagnostics, charsList) : false)),
+        vscode.workspace.onDidChangeTextDocument((e) => refreshDiagnostics(e.document, peskyDiagnostics, charsList)),
         vscode.workspace.onDidCloseTextDocument((doc) => peskyDiagnostics.delete(doc.uri))
     )
 }
